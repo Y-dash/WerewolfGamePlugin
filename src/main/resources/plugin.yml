@@ -1,7 +1,45 @@
-name: Werewolf Game Plugin
+name: WerewolfGamePlugin
 version: ${project.version}
 main: net.y_dash.minecraft.werewolf_game_plugin.werewolfgameplugin.WerewolfGamePlugin
 api-version: 1.15
-authors: [Ydash]
+authors: [Y-dash]
 description: Minecraftで人狼ゲームを遊ぶプラグイン。 
 website: https://y-dash.net
+commands:
+  wjoin:
+    description: 対象プレイヤーを参加登録する
+    usage: /<command> [player]
+    permission: werewolf-game-plugin.op
+  wleave:
+    description: 対象プレイヤーを参加登録から削除する
+    usage: /<command> [player]
+    permission: werewolf-game-plugin.op
+  wclear:
+    description: 参加登録リストを全削除する
+    usage: /<command>
+    permission: werewolf-game-plugin.op
+  wlist:
+    description: 参加登録リストを表示する
+    usage: /<command>
+    permission: werewolf-game-plugin.default
+  wstart:
+    description: ゲームを開始する
+    usage: /<command>
+    permission: werewolf-game-plugin.op
+  wend:
+    description: ゲームを強制終了 (廃村) する
+    usage: /<command>
+    permission: werewolf-game-plugin.op
+  wred:
+    description: 人狼チャットへメッセージを送る
+    usage: /<command> [text message]
+    permission: werewolf-game-plugin.default
+  wv:
+    description: 投票/噛み先/能力行使の対象プレイヤーを選択する
+    usage: /<command> [player]
+    permission: werewolf-game-plugin.default
+permissions:
+  werewolf-game-plugin.default:
+    default: true
+  werewolf-game-plugin.op:
+    default: op
