@@ -1,0 +1,7 @@
+name: Werewolf Game Plugin
+version: ${project.version}
+main: net.y_dash.minecraft.werewolf_game_plugin.werewolfgameplugin.WerewolfGamePlugin
+api-version: 1.15
+authors: [Ydash]
+description: Minecraftで人狼ゲームを遊ぶプラグイン。 
+website: https://y-dash.net
