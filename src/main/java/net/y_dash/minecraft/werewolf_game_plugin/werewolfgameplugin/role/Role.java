@@ -1,6 +1,5 @@
 package net.y_dash.minecraft.werewolf_game_plugin.werewolfgameplugin.role;
 
-import net.y_dash.minecraft.werewolf_game_plugin.werewolfgameplugin.Game;
 import org.bukkit.entity.Player;
 
 /**
@@ -15,7 +14,16 @@ public abstract class Role {
     public abstract String getRoleNameJa();
 
     /**
-     * 夜の行動
+     * 夜開始時のアナウンス
      */
-    public abstract void actAtNight();
+    public abstract void announceAtNight();
+
+    /**
+     * 夜の行動
+     *
+     * @param votingPlayer 行動するプレイヤー
+     * @param targetPlayer 行動対象のプレイヤー
+     * @return 行動成否
+     */
+    public abstract boolean voteAtNight(Player votingPlayer, Player targetPlayer);
 }

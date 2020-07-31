@@ -13,8 +13,19 @@ public class Psychic extends VillagerTeamRole {
     }
 
     @Override
-    public void actAtNight() {
-        // 霊能結果見る
-        return;
+    public void announceAtNight() {
+        Game.survivorMap.entrySet().stream().filter(map -> map.getValue() instanceof Psychic)
+                .forEach(map -> {
+                    Game.tellraw(map.getKey().getName(),
+                            "[霊能結果] 「" + Game.gameStatus.executedPlayerAtDaytime.getName() + "は"
+                                    + ((Game.getRole(Game.gameStatus.executedPlayerAtDaytime) instanceof Werewolf) ? "人狼である" : "人狼ではない") + "」",
+                            "yellow");
+                    Game.gameStatus.actedPlayerList.add(map.getKey());
+                });
+    }
+
+    @Override
+    public boolean voteAtNight(Player votingPlayer, Player targetPlayer) {
+        return false;
     }
 }

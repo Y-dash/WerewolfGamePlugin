@@ -1,14 +1,9 @@
 package net.y_dash.minecraft.werewolf_game_plugin.werewolfgameplugin;
 
-import net.y_dash.minecraft.werewolf_game_plugin.werewolfgameplugin.game_status.Daytime;
 import net.y_dash.minecraft.werewolf_game_plugin.werewolfgameplugin.game_status.GameStatus;
-import net.y_dash.minecraft.werewolf_game_plugin.werewolfgameplugin.game_status.Night;
 import net.y_dash.minecraft.werewolf_game_plugin.werewolfgameplugin.game_status.None;
 import net.y_dash.minecraft.werewolf_game_plugin.werewolfgameplugin.role.*;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
@@ -25,62 +20,24 @@ public class Game implements Listener {
     /** 役職リスト */
     public static final List<Role> DEFAULT_ROLE_LIST = new ArrayList<>(Arrays.asList(
             new Villager(), new Villager(), new Villager(), new FortuneTeller(), new Psychic(), new Hunter(), new Madman(), new Werewolf(), new Werewolf()));
-//    public static final List<Role> DEFAULT_ROLE_LIST = new ArrayList<>(Arrays.asList(new Werewolf()));
 
     /** ゲームステータス */
-    public GameStatus gameStatus = new None(0);
+    public static GameStatus gameStatus = new None(0);
     /** 参加登録者リスト */
-    public List<Player> registrantList = new ArrayList<>(Arrays.asList());
+    public static List<Player> registrantList = new ArrayList<>(Arrays.asList());
     /** 参加者マップ */
-    public HashMap<Player, Role> participantMap = new HashMap<Player, Role>();
+    public static HashMap<Player, Role> participantMap = new HashMap<Player, Role>();
     /** 生存者マップ */
-    public HashMap<Player, Role> survivorMap = new HashMap<Player, Role>();
+    public static HashMap<Player, Role> survivorMap = new HashMap<Player, Role>();
 
     /**
-     * ゲーム未開始状態か
-     *
-     * @return ゲーム未開始ならtrue
+     * プレイヤーと役職内訳を出力
      */
-    public boolean isGameStatusNone() {
-        return (gameStatus instanceof None);
-    }
-
-    /**
-     * 昼か
-     *
-     * @return 昼ならtrue
-     */
-    public boolean isGameStatusDaytime() {
-        return (gameStatus instanceof Daytime);
-    }
-
-    /**
-     * 夜か
-     *
-     * @return 夜ならtrue
-     */
-    public boolean isGameStatusNight() {
-        return (gameStatus instanceof Night);
-    }
-
-    /**
-     * 役職を返す
-     *
-     * @param player 対象プレイヤー
-     * @return 役職
-     */
-    public Role getRole(Player player) {
-        return participantMap.get(player);
-    }
-
-    /**
-     * プレイヤーと役職内訳を返す
-     *
-     * @return 内訳
-     */
-    public String getPlayerAndRoles() {
-        return "[内訳] " + participantMap.entrySet().stream().map(map -> map.getKey().getName() + "=" + map.getValue().getRoleNameJa())
-                .collect(Collectors.joining(", "));
+    public static void tellrawPlayerAndRoles() {
+        tellraw("@a",
+                "[内訳] " + participantMap.entrySet().stream().map(map -> map.getKey().getName() + "=" + map.getValue().getRoleNameJa())
+                .collect(Collectors.joining(", ")),
+                "yellow");
     }
 
     /**
@@ -88,8 +45,46 @@ public class Game implements Listener {
      *
      * @param command コマンド文字列
      */
-    public void executeServerCommand(String command) {
+    public static void executeServerCommand(String command) {
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+    }
+
+    /**
+     * プレイヤーを取得
+     *
+     * @param playerName プレイヤー名
+     * @return プレイヤー
+     */
+    public static Player getPlayer(String playerName) {
+        return Bukkit.getServer().getPlayer(playerName);
+    }
+
+    /**
+     * 役職を取得
+     *
+     * @param player プレイヤー
+     * @return 役職
+     */
+    public static Role getRole(Player player) {
+        return survivorMap.get(player);
+    }
+
+    /**
+     * 未ゲーム状態かを返す
+     *
+     * @return 未ゲーム状態ならtrue
+     */
+    public static boolean isGameStatusNone() {
+        return (Game.gameStatus instanceof None);
+    }
+
+    /**
+     * 生存している人狼の数を返す
+     *
+     * @return 生存人狼数
+     */
+    public static long getWerewolfCount() {
+        return survivorMap.entrySet().stream().filter(map -> map.getValue() instanceof Werewolf).count();
     }
 
     /**
@@ -98,7 +93,7 @@ public class Game implements Listener {
      * @param title タイトル文字列
      * @param color カラー文字列
      */
-    public void sendTitle(String title, String color) {
+    public static void sendTitle(String title, String color) {
         executeServerCommand("title @a title {\"text\":\"" + title + "\", \"color\":\"" + color + "\"}");
     }
 
@@ -107,7 +102,7 @@ public class Game implements Listener {
      *
      * @param title タイトル文字列
      */
-    public void sendTitle(String title) {
+    public static void sendTitle(String title) {
         sendTitle(title, "white");
     }
 
@@ -117,7 +112,7 @@ public class Game implements Listener {
      * @param targetPlayerName 対象プレイヤー名
      * @param message メッセージ文字列
      */
-    public void tell(String targetPlayerName, String message) {
+    public static void tell(String targetPlayerName, String message) {
         executeServerCommand("tell " + targetPlayerName + " " + message);
     }
 
@@ -128,7 +123,7 @@ public class Game implements Listener {
      * @param message メッセージ文字列
      * @param color カラー文字列
      */
-    public void tellraw(String targetPlayerName, String message, String color) {
+    public static void tellraw(String targetPlayerName, String message, String color) {
         executeServerCommand("tellraw "+ targetPlayerName + " {\"text\":\"" + message + "\",\"color\":\"" + color + "\",\"italic\":true}");
     }
 
@@ -137,7 +132,7 @@ public class Game implements Listener {
      *
      * @param message メッセージ文字列
      */
-    public void say(String message) {
+    public static void say(String message) {
         executeServerCommand("say " + message);
     }
 
@@ -146,8 +141,18 @@ public class Game implements Listener {
      *
      * @param message メッセージ文字列
      */
-    public void tellWerewolf(String message) {
+    public static void tellWerewolf(String message) {
         survivorMap.entrySet().stream().filter(map -> map.getValue() instanceof Werewolf).map(map -> map.getKey().getName())
                 .forEach(name -> tellraw(name, message, "dark_red"));
+    }
+
+    /**
+     * ゲーム終了処理
+     */
+    public static void endGame() {
+        tellrawPlayerAndRoles();
+        gameStatus = new None(0);
+        participantMap.clear();
+        survivorMap.clear();
     }
 }

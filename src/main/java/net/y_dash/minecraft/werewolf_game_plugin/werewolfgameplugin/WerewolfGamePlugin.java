@@ -10,17 +10,14 @@ public final class WerewolfGamePlugin extends JavaPlugin {
         Game game = new Game();
 
         getServer().getPluginManager().registerEvents(game, this);
-        this.getCommand("wjoin").setExecutor(new JoinCommand(game));
-        this.getCommand("wleave").setExecutor(new LeaveCommand(game));
-        this.getCommand("wclear").setExecutor(new ClearCommand(game));
-        this.getCommand("wlist").setExecutor(new ListCommand(game));
-        this.getCommand("wstart").setExecutor(new StartCommand(game));
-        this.getCommand("wend").setExecutor(new EndCommand(game));
-        this.getCommand("wred").setExecutor(new RedCommand(game));
-    }
 
-    @Override
-    public void onDisable() {
-        // Plugin shutdown logic
+        this.getCommand("wjoin").setExecutor(new JoinCommand());
+        this.getCommand("wleave").setExecutor(new LeaveCommand());
+        this.getCommand("wclear").setExecutor(new ClearCommand());
+        this.getCommand("wlist").setExecutor(new ListCommand());
+        this.getCommand("wstart").setExecutor(new StartCommand());
+        this.getCommand("wend").setExecutor(new EndCommand());
+        this.getCommand("wred").setExecutor(new RedCommand());
+        this.getCommand("wv").setExecutor(new VoteCommand());
     }
 }

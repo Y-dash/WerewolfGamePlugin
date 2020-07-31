@@ -13,7 +13,18 @@ public class Villager extends VillagerTeamRole {
     }
 
     @Override
-    public void actAtNight() {
-        return;
+    public void announceAtNight() {
+        Game.survivorMap.entrySet().stream().filter(map -> map.getValue() instanceof Villager)
+                .forEach(map -> {
+                    Game.tellraw(map.getKey().getName(),
+                            "村人が夜に使える能力はありません。能力を持つ全員が行動を完了すると夜が終わります",
+                            "yellow");
+                    Game.gameStatus.actedPlayerList.add(map.getKey());
+                });
+    }
+
+    @Override
+    public boolean voteAtNight(Player votingPlayer, Player targetPlayer) {
+        return false;
     }
 }
