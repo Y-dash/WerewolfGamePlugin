@@ -22,7 +22,7 @@ public class LeaveCommand extends WerewolfGameCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(!(game.gameStatus instanceof None)) {
+        if(!game.isGameStatusNone()) {
             sender.sendMessage("ゲーム開始後には削除できません");
             return false;
         }

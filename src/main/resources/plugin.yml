@@ -32,7 +32,7 @@ commands:
     permission: werewolf-game-plugin.op
   wred:
     description: 人狼チャットへメッセージを送る
-    usage: /<command> [text message]
+    usage: /<command> <message>
     permission: werewolf-game-plugin.default
   wv:
     description: 投票/噛み先/能力行使の対象プレイヤーを選択する

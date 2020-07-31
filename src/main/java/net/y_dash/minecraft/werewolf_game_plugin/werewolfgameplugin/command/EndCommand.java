@@ -4,33 +4,31 @@ import net.y_dash.minecraft.werewolf_game_plugin.werewolfgameplugin.Game;
 import net.y_dash.minecraft.werewolf_game_plugin.werewolfgameplugin.game_status.None;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-/**
- * 参加登録リストを全削除する
- */
-public class ClearCommand extends WerewolfGameCommand {
+public class EndCommand extends WerewolfGameCommand {
     /**
      * コンストラクタ
      *
      * @param game コマンド対象となるゲーム
      */
-    public ClearCommand(Game game) {
+    public EndCommand(Game game) {
         super(game);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(!game.isGameStatusNone()) {
-            sender.sendMessage("ゲーム開始後には削除できません");
+        if(game.isGameStatusNone()) {
+            sender.sendMessage("ゲームが開始されていません");
             return false;
         }
 
-        game.registrantList.clear();
-        sender.sendMessage("参加登録リストを全削除しました");
+        game.sendTitle("ゲーム中断");
+        game.say(game.getPlayerAndRoles());
+
+        game.gameStatus = new None(0);
+        game.participantMap.clear();
+        game.survivorMap.clear();
+
         return true;
     }
 }

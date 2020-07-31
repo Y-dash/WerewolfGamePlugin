@@ -23,8 +23,7 @@ public class ListCommand extends WerewolfGameCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        List<Player> registrantList = game.registrantList;
-        sender.sendMessage("参加登録中 [" + registrantList.size() + "名] : " + registrantList.stream().map(
+        sender.sendMessage("[参加登録リスト] (" + game.registrantList.size() + "名) : " + game.registrantList.stream().map(
                 player -> player.getName()).collect(Collectors.joining(", ")));
         return true;
     }

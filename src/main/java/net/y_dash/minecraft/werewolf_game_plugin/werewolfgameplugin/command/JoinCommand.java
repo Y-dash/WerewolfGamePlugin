@@ -25,12 +25,13 @@ public class JoinCommand extends WerewolfGameCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(game.registrantList.size() >= game.DEFAULT_ROLE_LIST.size()) {
-            sender.sendMessage("参加登録者が満員です。/wleaveでmcid指定削除、もしくは/wclearで全削除してから追加してください");
+        if(!game.isGameStatusNone()) {
+            sender.sendMessage("ゲーム開始後には追加できません");
             return false;
         }
-        if(!(game.gameStatus instanceof None)) {
-            sender.sendMessage("ゲーム開始後には追加できません");
+
+        if(game.registrantList.size() >= game.DEFAULT_ROLE_LIST.size()) {
+            sender.sendMessage("参加登録者が満員です。/wleaveでmcid指定削除、もしくは/wclearで全削除してから追加してください");
             return false;
         }
 
