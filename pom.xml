@@ -6,7 +6,7 @@
 
     <groupId>net.y_dash.minecraft.werewolf_game_plugin</groupId>
     <artifactId>werewolf-game-plugin</artifactId>
-    <version>1.0.0</version>
+    <version>0.0.1</version>
     <packaging>jar</packaging>
 
     <name>Werewolf Game Plugin</name>
