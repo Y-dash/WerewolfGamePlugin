@@ -36,16 +36,21 @@ public class Night extends GameStatus {
             return false;
         }
 
-        // 投票終了判定
+        // 行動終了判定
         if(votedPlayerList.size() < Game.survivorMap.size()) {
             return true;
         }
 
         // 狼かみ
-        killPlayer(votedPlayerList.stream()
-                        .collect(Collectors.groupingBy(player -> player, Collectors.counting())).entrySet().stream()
-                        .sorted(Comparator.comparing(map -> map.getValue(), reverseOrder())).findFirst().get().getKey(),
-                "死亡しました");
+        Player killedPlayer = votedPlayerList.stream()
+                .collect(Collectors.groupingBy(player -> player, Collectors.counting())).entrySet().stream()
+                .sorted(Comparator.comparing(map -> map.getValue(), reverseOrder())).findFirst().get().getKey();
+
+        if(killedPlayer == Game.gameStatus.protectedPlayer) {
+            Game.tellraw("@a", "犠牲者は出ませんでした", "yellow");
+        } else {
+            killPlayer(killedPlayer, "死亡しました");
+        }
 
         // 終了判定
         if(judge()) {
