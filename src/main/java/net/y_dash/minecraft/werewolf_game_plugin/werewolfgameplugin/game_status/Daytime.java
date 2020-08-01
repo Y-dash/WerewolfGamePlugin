@@ -3,12 +3,10 @@ package net.y_dash.minecraft.werewolf_game_plugin.werewolfgameplugin.game_status
 import net.y_dash.minecraft.werewolf_game_plugin.werewolfgameplugin.Game;
 import org.bukkit.entity.Player;
 
-import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static java.util.Comparator.reverseOrder;
+import static org.bukkit.Bukkit.getLogger;
 
 /**
  * 昼
@@ -44,23 +42,23 @@ public class Daytime extends GameStatus {
         }
 
         // 処刑処理
-        Stream<Map.Entry<Player, Long>> aggregatevotedPlayerStream = votedPlayerList.stream()
-                .collect(Collectors.groupingBy(player -> player, Collectors.counting())).entrySet().stream()
-                .sorted(Comparator.comparing(map -> map.getValue(), reverseOrder()));
+        List<Map.Entry<Player, Long>> sortedvotedPlayerList = getSortedvotedPlayerList();
 
-        Game.tellraw(
+        Game.tellraw("@a", "[投票終了]", "yellow");
+
+        sortedvotedPlayerList.forEach(map -> Game.tellraw(
                 "@a",
-                "[投票終了]\n" + aggregatevotedPlayerStream.map(map -> map.getValue().toString() + "票 : " + map.getKey().getName())
-                        .collect(Collectors.joining("\n")),
-                "yellow");
+                map.getValue().toString() + "票: " + map.getKey().getName(),
+                "yellow"));
 
-        Player executionPlayer = aggregatevotedPlayerStream.findFirst().get().getKey();
+        Player executionPlayer = sortedvotedPlayerList.get(sortedvotedPlayerList.size() - 1).getKey();
         killPlayer(executionPlayer, "処刑されました");
 
         // 勝利判定
         if(judge()) {
             return true;
         }
+        getLogger().info("勝利");
 
         Game.gameStatus = new Night(days, executionPlayer);
         return true;

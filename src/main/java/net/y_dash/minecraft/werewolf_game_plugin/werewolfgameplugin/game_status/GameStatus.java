@@ -3,9 +3,8 @@ package net.y_dash.minecraft.werewolf_game_plugin.werewolfgameplugin.game_status
 import net.y_dash.minecraft.werewolf_game_plugin.werewolfgameplugin.Game;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * ゲームステータス
@@ -58,17 +57,29 @@ public abstract class GameStatus {
             return false;
         }
 
-        if(!Game.survivorMap.containsValue(votingPlayer)) {
+        if(!Game.survivorMap.containsKey(votingPlayer)) {
             votingPlayer.sendMessage("行動できるのは生存者のみです");
             return false;
         }
 
-        if(!Game.survivorMap.containsValue(targetPlayer)) {
+        if(!Game.survivorMap.containsKey(targetPlayer)) {
             votingPlayer.sendMessage("対象にできるのは生存者のみです");
             return false;
         }
 
         return true;
+    }
+
+    public List<Map.Entry<Player, Long>> getSortedvotedPlayerList() {
+        Map<Player, Long> votedPlayerMap = votedPlayerList.stream()
+                .collect(Collectors.groupingBy(player -> player, Collectors.counting()));
+
+        List<Map.Entry<Player, Long>> entryList = new LinkedList<>(votedPlayerMap.entrySet());
+        entryList.sort(Comparator.comparing(Map.Entry::getValue));
+
+        Collections.reverse(entryList);
+
+        return entryList;
     }
 
     /**

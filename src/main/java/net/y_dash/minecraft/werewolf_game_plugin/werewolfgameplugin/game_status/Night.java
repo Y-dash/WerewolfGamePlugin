@@ -4,6 +4,8 @@ import net.y_dash.minecraft.werewolf_game_plugin.werewolfgameplugin.Game;
 import org.bukkit.entity.Player;
 
 import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static java.util.Comparator.reverseOrder;
@@ -41,9 +43,8 @@ public class Night extends GameStatus {
         }
 
         // 狼かみ
-        Player killedPlayer = votedPlayerList.stream()
-                .collect(Collectors.groupingBy(player -> player, Collectors.counting())).entrySet().stream()
-                .sorted(Comparator.comparing(map -> map.getValue(), reverseOrder())).findFirst().get().getKey();
+        List<Map.Entry<Player, Long>> sortedvotedPlayerList = getSortedvotedPlayerList();
+        Player killedPlayer = sortedvotedPlayerList.get(sortedvotedPlayerList.size() - 1).getKey();
 
         if(killedPlayer == Game.gameStatus.protectedPlayer) {
             Game.tellraw("@a", "犠牲者は出ませんでした", "yellow");

@@ -18,8 +18,9 @@ import java.util.stream.Collectors;
  */
 public class Game implements Listener {
     /** 役職リスト */
-    public static final List<Role> DEFAULT_ROLE_LIST = new ArrayList<>(Arrays.asList(
-            new Villager(), new Villager(), new Villager(), new FortuneTeller(), new Psychic(), new Hunter(), new Madman(), new Werewolf(), new Werewolf()));
+    //public static final List<Role> DEFAULT_ROLE_LIST = new ArrayList<>(Arrays.asList(
+    //        new Villager(), new Villager(), new Villager(), new FortuneTeller(), new Psychic(), new Hunter(), new Madman(), new Werewolf(), new Werewolf()));
+    public static final List<Role> DEFAULT_ROLE_LIST = new ArrayList<>(Arrays.asList(new FortuneTeller(), new Werewolf()));
 
     /** ゲームステータス */
     public static GameStatus gameStatus = new None(0);
